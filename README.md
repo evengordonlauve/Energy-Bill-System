@@ -1,5 +1,4 @@
 # Energy-Bill-System
-codex/lag-next.js-side-med-firebase-auth
 This project contains a minimal Next.js application with Firebase Authentication and Tailwind CSS. Users can register, log in with email and password, and request password reset emails.
 
 ## Setup
@@ -23,7 +22,7 @@ This project contains a minimal Next.js application with Firebase Authentication
    ```
 
 Visit `http://localhost:3000` to see the login page.
-=======
+
 This project now includes a minimal Next.js setup.
 
 ## Development
@@ -43,4 +42,3 @@ npm run dev
 ## AdminPanel
 
 `pages/AdminPanel.js` is protected. The page checks a cookie named `role` and only allows access when its value is `developer`. Other users are redirected to the front page.
- main
