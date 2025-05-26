@@ -1,5 +1,5 @@
 # Energy-Bill-System
-This project contains a minimal Next.js application with Firebase Authentication and Tailwind CSS. Users can register, log in with email and password, and request password reset emails.
+This project contains a minimal Next.js application using a simple JSON file for user data and Tailwind CSS. Users can register, log in with email and password, and request password reset tokens.
 
 ## Setup
 
@@ -7,16 +7,7 @@ This project contains a minimal Next.js application with Firebase Authentication
    ```bash
    npm install
    ```
-2. Create a `.env.local` file in the project root with your Firebase configuration:
-   ```env
-   NEXT_PUBLIC_FIREBASE_API_KEY=your_key
-   NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN=your_domain
-   NEXT_PUBLIC_FIREBASE_PROJECT_ID=your_project_id
-   NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET=your_bucket
-   NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID=your_sender_id
-   NEXT_PUBLIC_FIREBASE_APP_ID=your_app_id
-   ```
-3. Run the development server:
+2. Run the development server:
    ```bash
    npm run dev
    ```
@@ -41,4 +32,4 @@ npm run dev
 
 ## AdminPanel
 
-`pages/AdminPanel.js` is protected. The page checks a cookie named `role` and only allows access when its value is `developer`. Other users are redirected to the front page.
+`pages/AdminPanel.js` is protected. The page verifies the logged-in user's groups from the session and only allows access to members of the `admin` group.

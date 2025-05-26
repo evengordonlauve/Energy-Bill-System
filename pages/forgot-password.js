@@ -1,9 +1,6 @@
 import { useState } from 'react';
 import Link from 'next/link';
-import { initFirebase, auth } from '@/firebase/firebaseClient';
-import { sendPasswordResetEmail } from 'firebase/auth';
-
-initFirebase();
+// This page now uses the local API for password reset requests.
 
 export default function ForgotPasswordPage() {
   const [email, setEmail] = useState('');
@@ -12,11 +9,21 @@ export default function ForgotPasswordPage() {
 
   const handleReset = async (e) => {
     e.preventDefault();
-    try {
-      await sendPasswordResetEmail(auth(), email);
-      setMessage('Password reset email sent');
-    } catch (err) {
-      setError(err.message);
+    setError('');
+    setMessage('');
+    const res = await fetch('/api/forgot-password', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email }),
+    });
+    if (res.ok) {
+      const data = await res.json();
+      setMessage(
+        `Reset token: ${data.token}. Visit /reset-password?token=${data.token} to set a new password.`
+      );
+    } else {
+      const err = await res.json();
+      setError(err.error || 'Failed to request password reset');
     }
   };
 
