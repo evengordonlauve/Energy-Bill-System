@@ -1,4 +1,11 @@
 import { parse } from 'cookie';
+ codex/design-login-page-with-background-and-menu
+
+export async function getServerSideProps({ req }) {
+  const cookies = req.headers.cookie ? parse(req.headers.cookie) : {};
+  const destination = cookies.user ? '/home' : '/login';
+  return { redirect: { destination, permanent: false } };
+=======
 import { getSession, getUsers } from '../lib/data.js';
 import Link from 'next/link';
 
@@ -30,4 +37,7 @@ export default function Home({ user }) {
       )}
     </main>
   );
+ main
 }
+
+export default function Index() { return null; }
