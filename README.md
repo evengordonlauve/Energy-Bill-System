@@ -8,10 +8,7 @@ This project contains a minimal Next.js application using PostgreSQL for user da
    npm install
    ```
 2. Create a PostgreSQL database and add your connection details to a `.env.local`
-   file. You can either provide a `DATABASE_URL` connection string or specify each
-   field separately:
-   ```ini
-   # DATABASE_URL=postgres://user:pass@host:5432/dbname
+main
    DB_USER=youruser
    DB_PASS=yourpass
    DB_HOST=localhost
