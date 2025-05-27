@@ -4,7 +4,7 @@ import { getSession } from '../lib/data.js';
 export async function getServerSideProps({ req }) {
   const cookies = req.headers.cookie ? parse(req.headers.cookie) : {};
   const token = cookies.session;
-  const userId = getSession(token);
+  const userId = await getSession(token);
   if (userId) {
     return {
       redirect: {

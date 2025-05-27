@@ -5,8 +5,9 @@ import Link from 'next/link';
 export async function getServerSideProps({ req }) {
   const cookies = req.headers.cookie ? parse(req.headers.cookie) : {};
   const token = cookies.session;
-  const userId = getSession(token);
-  const user = getUsers().find(u => u.id === userId) || null;
+  const userId = await getSession(token);
+  const users = await getUsers();
+  const user = users.find(u => u.id === userId) || null;
   return { props: { user } };
 }
 

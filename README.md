@@ -1,5 +1,5 @@
 # Energy-Bill-System
-This project contains a minimal Next.js application using a simple JSON file for user data and Tailwind CSS. Users can register, log in with email and password, and request password reset tokens.
+This project contains a minimal Next.js application using PostgreSQL for user data and Tailwind CSS. Users can register, log in with email and password, and request password reset tokens.
 
 ## Setup
 
@@ -7,7 +7,12 @@ This project contains a minimal Next.js application using a simple JSON file for
    ```bash
    npm install
    ```
-2. Run the development server:
+2. Create a PostgreSQL database and set the `DATABASE_URL` environment variable.
+   The provided SQL schema in `sql/schema.sql` can be used to create the required tables:
+   ```bash
+   psql "$DATABASE_URL" -f sql/schema.sql
+   ```
+3. Run the development server:
    ```bash
    npm run dev
    ```

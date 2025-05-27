@@ -1,0 +1,20 @@
+CREATE TABLE IF NOT EXISTS users (
+  id SERIAL PRIMARY KEY,
+  email TEXT UNIQUE NOT NULL,
+  password_hash TEXT NOT NULL,
+  groups TEXT[] NOT NULL DEFAULT '{}'
+);
+
+CREATE TABLE IF NOT EXISTS groups (
+  name TEXT PRIMARY KEY
+);
+
+CREATE TABLE IF NOT EXISTS sessions (
+  token TEXT PRIMARY KEY,
+  user_id INTEGER REFERENCES users(id) ON DELETE CASCADE
+);
+
+CREATE TABLE IF NOT EXISTS reset_tokens (
+  token TEXT PRIMARY KEY,
+  email TEXT NOT NULL
+);
