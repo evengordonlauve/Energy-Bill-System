@@ -4,8 +4,9 @@ import { getSession, getUsers, getGroups } from '../lib/data.js';
 export async function getServerSideProps({ req }) {
   const cookies = req.headers.cookie ? parse(req.headers.cookie) : {};
   const token = cookies.session;
-  const userId = getSession(token);
-  const user = getUsers().find(u => u.id === userId);
+  const userId = await getSession(token);
+  const users = await getUsers();
+  const user = users.find(u => u.id === userId);
 
   if (!user || !user.groups.includes('admin')) {
     return {
@@ -16,7 +17,8 @@ export async function getServerSideProps({ req }) {
     };
   }
 
-  return { props: { groups: getGroups() } };
+  const groups = await getGroups();
+  return { props: { groups } };
 }
 
 export default function AdminPanel({ groups }) {

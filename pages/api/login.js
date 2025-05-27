@@ -1,7 +1,7 @@
 import { findUserByEmail, createSession } from '../../lib/data.js';
 import crypto from 'crypto';
 
-export default function handler(req, res) {
+export default async function handler(req, res) {
   if (req.method !== 'POST') {
     return res.status(405).end();
   }
@@ -11,7 +11,7 @@ export default function handler(req, res) {
     return res.status(400).json({ error: 'Missing credentials' });
   }
 
-  const user = findUserByEmail(email);
+  const user = await findUserByEmail(email);
   if (!user) {
     return res.status(401).json({ error: 'Invalid user' });
   }
@@ -22,7 +22,7 @@ export default function handler(req, res) {
   }
 
   const token = crypto.randomBytes(16).toString('hex');
-  createSession(user.id, token);
+  await createSession(user.id, token);
   res.setHeader('Set-Cookie', `session=${token}; Path=/; HttpOnly`);
   res.status(200).json({ success: true });
 }
