@@ -1,4 +1,4 @@
-import { addUser, getSession, getUsers } from '../../../lib/data.js';
+import { createUser, getSession, getUsers } from '../../../lib/auth.js';
 import crypto from 'crypto';
 import { parse } from 'cookie';
 
@@ -22,6 +22,6 @@ export default async function handler(req, res) {
   }
 
   const passwordHash = crypto.createHash('sha256').update(password).digest('hex');
-  await addUser(email, passwordHash, Array.isArray(groups) ? groups : []);
+  await createUser(email, passwordHash, Array.isArray(groups) ? groups : []);
   res.status(200).json({ success: true });
 }

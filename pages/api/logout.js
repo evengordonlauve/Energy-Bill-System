@@ -1,4 +1,4 @@
-import { deleteSession } from '../../lib/data.js';
+import { deleteSession } from '../../lib/auth.js';
 import { parse } from 'cookie';
 
 export default async function handler(req, res) {

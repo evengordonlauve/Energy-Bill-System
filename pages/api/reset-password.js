@@ -2,7 +2,7 @@ import {
   getEmailByResetToken,
   deleteResetToken,
   updateUserPassword,
-} from '../../lib/data.js';
+} from '../../lib/auth.js';
 import crypto from 'crypto';
 
 export default async function handler(req, res) {

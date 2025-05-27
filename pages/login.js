@@ -1,5 +1,5 @@
 import { parse } from 'cookie';
-import { getSession } from '../lib/data.js';
+import { getSession } from '../lib/auth.js';
 
 export async function getServerSideProps({ req }) {
   const cookies = req.headers.cookie ? parse(req.headers.cookie) : {};
