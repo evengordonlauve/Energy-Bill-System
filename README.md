@@ -8,17 +8,18 @@ This project contains a minimal Next.js application using PostgreSQL for user da
    npm install
    ```
 2. Create a PostgreSQL database and add your connection details to a `.env.local`
-main
-   DB_USER=youruser
-   DB_PASS=yourpass
-   DB_HOST=localhost
-   DB_NAME=energy
-   DB_PORT=5432
+   ```env
+   AZURE_POSTGRESQL_USER=youruser
+   AZURE_POSTGRESQL_PASSWORD=yourpass
+   AZURE_POSTGRESQL_HOST=localhost
+   AZURE_POSTGRESQL_PORT=5432
+   AZURE_POSTGRESQL_DATABASE=energy
+   AZURE_POSTGRESQL_SSL=true
    ```
 
    The provided SQL schema in `sql/schema.sql` can be used to create the required tables:
    ```bash
-   psql -h $DB_HOST -U $DB_USER -d $DB_NAME -f sql/schema.sql
+   psql -h $AZURE_POSTGRESQL_HOST -U $AZURE_POSTGRESQL_USER -d $AZURE_POSTGRESQL_DATABASE -f sql/schema.sql
    ```
 3. Run the development server:
    ```bash
