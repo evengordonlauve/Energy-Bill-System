@@ -1,4 +1,4 @@
-import { findUserByEmail, createSession } from '../../lib/data.js';
+import { findUserByEmail, createSession } from '../../lib/auth.js';
 import crypto from 'crypto';
 
 export default async function handler(req, res) {

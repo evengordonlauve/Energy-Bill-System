@@ -1,5 +1,5 @@
 import { parse } from 'cookie';
-import { getSession, getUsers } from '../lib/data.js';
+import { getSession, getUsers } from '../lib/auth.js';
 import Link from 'next/link';
 
 export async function getServerSideProps({ req }) {
