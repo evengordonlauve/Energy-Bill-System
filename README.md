@@ -7,10 +7,19 @@ This project contains a minimal Next.js application using PostgreSQL for user da
    ```bash
    npm install
    ```
-2. Create a PostgreSQL database and set the `DATABASE_URL` environment variable.
+2. Create a PostgreSQL database and add your connection details to a `.env.local`
+   file:
+   ```ini
+   DB_USER=youruser
+   DB_PASS=yourpass
+   DB_HOST=localhost
+   DB_NAME=energy
+   DB_PORT=5432
+   ```
+
    The provided SQL schema in `sql/schema.sql` can be used to create the required tables:
    ```bash
-   psql "$DATABASE_URL" -f sql/schema.sql
+   psql -h $DB_HOST -U $DB_USER -d $DB_NAME -f sql/schema.sql
    ```
 3. Run the development server:
    ```bash
