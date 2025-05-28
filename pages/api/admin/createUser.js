@@ -1,5 +1,9 @@
-import { createUser, getSession, getUsers } from '../../../lib/auth.js';
-import crypto from 'crypto';
+import {
+  createUser,
+  getSession,
+  getUsers,
+  hashPassword,
+} from '../../../lib/auth.js';
 import { parse } from 'cookie';
 
 export default async function handler(req, res) {
@@ -21,7 +25,7 @@ export default async function handler(req, res) {
     return res.status(400).json({ error: 'Missing fields' });
   }
 
-  const passwordHash = crypto.createHash('sha256').update(password).digest('hex');
+  const passwordHash = await hashPassword(password);
   await createUser(email, passwordHash, Array.isArray(groups) ? groups : []);
   res.status(200).json({ success: true });
 }

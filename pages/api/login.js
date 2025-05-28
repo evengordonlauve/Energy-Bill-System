@@ -1,4 +1,4 @@
-import { findUserByEmail, createSession } from '../../lib/auth.js';
+import { findUserByEmail, createSession, verifyPassword } from '../../lib/auth.js';
 import crypto from 'crypto';
 
 export default async function handler(req, res) {
@@ -16,8 +16,8 @@ export default async function handler(req, res) {
     return res.status(401).json({ error: 'Invalid user' });
   }
 
-  const hash = crypto.createHash('sha256').update(password).digest('hex');
-  if (hash !== user.passwordHash) {
+  const valid = await verifyPassword(password, user.passwordHash);
+  if (!valid) {
     return res.status(401).json({ error: 'Invalid password' });
   }
 

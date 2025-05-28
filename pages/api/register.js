@@ -1,5 +1,4 @@
-import { createUser, findUserByEmail } from '../../lib/auth.js';
-import crypto from 'crypto';
+import { createUser, findUserByEmail, hashPassword } from '../../lib/auth.js';
 
 export default async function handler(req, res) {
   if (req.method !== 'POST') {
@@ -15,7 +14,7 @@ export default async function handler(req, res) {
     return res.status(400).json({ error: 'User already exists' });
   }
 
-  const passwordHash = crypto.createHash('sha256').update(password).digest('hex');
+  const passwordHash = await hashPassword(password);
   await createUser(email, passwordHash, []);
 
   res.status(200).json({ success: true });
