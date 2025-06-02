@@ -2,3 +2,46 @@ body {
   margin: 0;
   font-family: sans-serif;
 }
+
+.header {
+  background: #333;
+  color: #fff;
+  padding: 10px;
+}
+
+.nav-link {
+  color: #fff;
+  margin-right: 10px;
+  text-decoration: none;
+}
+
+.nav-link:hover {
+  text-decoration: underline;
+}
+
+.container {
+  padding: 20px;
+}
+
+.card {
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 20px;
+}
+
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 20px;
+}
+
+.user-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.user-table th,
+.user-table td {
+  border: 1px solid #ddd;
+  padding: 8px;
+}
