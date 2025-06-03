@@ -16,6 +16,7 @@
     "node": ">=18.x"
   },
   "devDependencies": {
-    "autoprefixer": "^10.4.21"
+    "autoprefixer": "^10.4.21",
+    "cross-env": "^7.0.3"
   }
 }
