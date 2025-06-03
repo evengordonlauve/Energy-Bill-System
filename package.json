@@ -5,10 +5,9 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "start": "cross-env PORT=3000 next start -p $PORT"
+    "start": "next start -p $PORT"
   },
   "dependencies": {
-    "cross-env": "^7.0.3",
     "next": "^14.2.29",
     "react": "18.2.0",
     "react-dom": "18.2.0"
