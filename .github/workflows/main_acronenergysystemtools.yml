@@ -71,4 +71,5 @@ jobs:
           app-name: 'acronenergysystemtools'
           slot-name: 'Production'
           package: .
+          clean: true
           
