@@ -64,6 +64,18 @@ jobs:
           tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_6A254CEF1C1D4AD69608514CD9E9EE9F }}
           subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_3B09DB5238FC48B585E13BB28E40E897 }}
 
+      - name: Configure build during deployment
+        uses: azure/appservice-settings@v1
+        with:
+          app-name: 'acronenergysystemtools'
+          app-settings-json: |
+            [
+              {
+                "name": "SCM_DO_BUILD_DURING_DEPLOYMENT",
+                "value": "true"
+              }
+            ]
+
       - name: 'Deploy to Azure Web App'
         id: deploy-to-webapp
         uses: azure/webapps-deploy@v3
