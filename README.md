@@ -1,6 +1,6 @@
 # Energy-Bill-System
 
-This repository now provides a very small Next.js skeleton. The application only renders an "Under Construction" page.
+This repository now provides a very small Next.js skeleton with placeholder pages for a Dashboard, Customers, Cost Calculations, Checklists and Administration. The site is automatically deployed to Azure via GitHub Actions.
 
 ## Setup
 
