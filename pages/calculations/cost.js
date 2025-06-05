@@ -202,7 +202,7 @@ export default function CostCalculations() {
       const id = tenantCount++;
       const card = document.createElement('div');
       card.className = 'relative border rounded p-3 bg-gray-50';
-      card.innerHTML = `
+      card.innerHTML = \`
         <button data-id="${id}" class="absolute top-1 right-1 text-gray-500 hover:text-gray-700">&times;</button>
         <label class="block text-sm mb-1">Navn</label>
         <input type="text" id="name_${id}" value="${data.name || ''}" class="w-full p-1 border rounded mb-1 focus:ring-blue-300 focus:outline-none" />
@@ -228,7 +228,7 @@ export default function CostCalculations() {
             </select>
           </div>
         </div>
-      `;
+      \`;
       tenantContainer.appendChild(card);
       card.querySelector('button').onclick = () => card.remove();
     }
@@ -285,13 +285,13 @@ export default function CostCalculations() {
 
         const div = document.createElement('div');
         div.className = 'p-3 bg-white rounded shadow';
-        div.innerHTML = `
+        div.innerHTML = \`
           <h3 class="font-semibold mb-1">${name}</h3>
           <p class="text-sm">Arealandel: ${areaPct} %</p>
           <p class="text-sm">El-kostnad: ${elCost.toFixed(1)} kr</p>
           <p class="text-sm">Produksjonsandel (rabatt ${(discount * 100).toFixed(0)}%): -${exportShare.toFixed(1)} kr</p>
           <p class="font-semibold text-right">Totalt: ${total.toFixed(1)} kr</p>
-        `;
+        \`;
         cardsDiv.appendChild(div);
       });
 
