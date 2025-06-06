@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import { ReactNode } from 'react';
 import { useAuth } from '../contexts/AuthContext';
 
 const navItems = [
@@ -10,8 +11,12 @@ const navItems = [
   { label: 'Admin', href: '/admin' }
 ];
 
-export default function Layout({ children }) {
-  const { isAuthenticated, user, logout } = useAuth();
+interface LayoutProps {
+  children: ReactNode;
+}
+
+export default function Layout({ children }: LayoutProps) {
+  const { isAuthenticated, user, logout } = useAuth() as any;
   return (
     <>
       <header className="header">
