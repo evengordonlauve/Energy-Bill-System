@@ -1,10 +1,40 @@
+import { useState } from 'react';
 import Layout from '../../components/Layout';
 
 export default function Settings() {
+  const [title, setTitle] = useState('Calculation Portal');
+  const [enableReg, setEnableReg] = useState(false);
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    alert('Demo save not implemented');
+  };
+
   return (
     <Layout>
-      <h1>Settings</h1>
-      <p>This page will contain system configuration in the future.</p>
+      <h1>System Settings</h1>
+      <form onSubmit={handleSubmit}>
+        <div className="form-group">
+          <label htmlFor="title">Portal Title</label>
+          <input
+            id="title"
+            type="text"
+            value={title}
+            onChange={(e) => setTitle(e.target.value)}
+          />
+        </div>
+        <div className="form-group">
+          <label>
+            <input
+              type="checkbox"
+              checked={enableReg}
+              onChange={(e) => setEnableReg(e.target.checked)}
+            />
+            Enable User Registration
+          </label>
+        </div>
+        <button type="submit" className="button">Save</button>
+      </form>
     </Layout>
   );
 }
