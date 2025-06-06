@@ -1,3 +1,4 @@
+
 import { useState } from 'react';
 import Head from 'next/head';
 import Layout from '../../components/Layout';
@@ -179,6 +180,7 @@ export default function CostCalculations() {
     setResults({ selfConsumed: selfConsumed.toFixed(1), selfPercent, tenantResults });
   };
 
+
   return (
     <Layout>
       <Head>
@@ -199,9 +201,11 @@ export default function CostCalculations() {
             <div>
               <label className="block mb-1 text-sm">Totalt byggareal (m²)</label>
               <input
+
                 type="number"
                 value={totalArea}
                 onChange={(e) => setTotalArea(parseFloat(e.target.value) || 0)}
+
                 className="w-full p-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-300"
               />
             </div>
@@ -211,6 +215,7 @@ export default function CostCalculations() {
                 type="number"
                 value={commonArea}
                 onChange={(e) => setCommonArea(parseFloat(e.target.value) || 0)}
+
                 className="w-full p-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-300"
               />
             </div>
@@ -220,6 +225,7 @@ export default function CostCalculations() {
         {/* 2. Leietakere */}
         <section className="mb-6">
           <h2 className="font-medium mb-3 border-b pb-1">2. Leietakere</h2>
+
           <div className="space-y-3">
             {tenants.map((t) => (
               <TenantCard
@@ -233,6 +239,10 @@ export default function CostCalculations() {
           <button
             type="button"
             onClick={addTenant}
+          <div id="tenants" className="space-y-3" />
+          <button
+            id="addTenant"
+
             className="mt-2 bg-blue-500 hover:bg-blue-600 text-white text-sm py-1 px-3 rounded transition"
           >
             + Legg til leietaker
@@ -246,42 +256,64 @@ export default function CostCalculations() {
             <div>
               <label className="block mb-1 text-sm">El-forbruk (kWh/mnd)</label>
               <input
+
                 type="number"
                 value={totalElectric}
                 onChange={(e) => setTotalElectric(parseFloat(e.target.value) || 0)}
+                id="total_electric"
+                type="number"
+                defaultValue="12000"
+
                 className="w-full p-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-300"
               />
             </div>
             <div>
               <label className="block mb-1 text-sm">Termisk forbruk (kWh/mnd)</label>
               <input
+
                 type="number"
                 value={totalThermal}
                 onChange={(e) => setTotalThermal(parseFloat(e.target.value) || 0)}
+
+                id="total_thermal"
+                type="number"
+                defaultValue="8000"
+
                 className="w-full p-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-300"
               />
             </div>
             <div>
               <label className="block mb-1 text-sm">Vannforbruk (m³/mnd)</label>
               <input
+
                 type="number"
                 value={totalWater}
                 onChange={(e) => setTotalWater(parseFloat(e.target.value) || 0)}
+                id="total_water"
+                type="number"
+                defaultValue="120"
+
                 className="w-full p-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-300"
               />
             </div>
             <div>
               <label className="block mb-1 text-sm">Produsert solenergi (kWh/mnd)</label>
               <input
+
                 type="number"
                 value={prodEnergy}
                 onChange={(e) => setProdEnergy(parseFloat(e.target.value) || 0)}
+                id="prod_energy"
+                type="number"
+                defaultValue="4000"
+
                 className="w-full p-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-300"
               />
             </div>
             <div>
               <label className="block mb-1 text-sm">Eksportert energi (kWh/mnd)</label>
               <input
+
                 type="number"
                 value={exportEnergy}
                 onChange={(e) => setExportEnergy(parseFloat(e.target.value) || 0)}
@@ -298,58 +330,70 @@ export default function CostCalculations() {
             <div>
               <label className="block mb-1 text-sm">Spotpris forbruk (kr/kWh)</label>
               <input
+s
                 type="number"
                 step="0.01"
                 value={priceConsumption}
                 onChange={(e) => setPriceConsumption(parseFloat(e.target.value) || 0)}
+
                 className="w-full p-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-300"
               />
             </div>
             <div>
               <label className="block mb-1 text-sm">Spotpris produksjon (kr/kWh)</label>
               <input
+
                 type="number"
                 step="0.01"
                 value={priceProduction}
                 onChange={(e) => setPriceProduction(parseFloat(e.target.value) || 0)}
+
                 className="w-full p-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-300"
               />
             </div>
             <div>
               <label className="block mb-1 text-sm">Nettleie fastledd (kr/mnd)</label>
               <input
+
                 type="number"
                 value={gridFixed}
                 onChange={(e) => setGridFixed(parseFloat(e.target.value) || 0)}
+
                 className="w-full p-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-300"
               />
             </div>
             <div>
               <label className="block mb-1 text-sm">Nettleie energiledd (kr/kWh)</label>
               <input
+
                 type="number"
                 step="0.01"
                 value={gridEnergy}
                 onChange={(e) => setGridEnergy(parseFloat(e.target.value) || 0)}
+
                 className="w-full p-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-300"
               />
             </div>
             <div>
               <label className="block mb-1 text-sm">Pris termisk energi (kr/kWh)</label>
               <input
+
                 type="number"
                 step="0.01"
                 value={priceThermal}
                 onChange={(e) => setPriceThermal(parseFloat(e.target.value) || 0)}
+
                 className="w-full p-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-300"
               />
             </div>
             <div>
               <label className="block mb-1 text-sm">Pris vann (kr/m³)</label>
               <input
+
                 type="number"
                 value={priceWater}
                 onChange={(e) => setPriceWater(parseFloat(e.target.value) || 0)}
+
                 className="w-full p-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-300"
               />
             </div>
@@ -359,8 +403,10 @@ export default function CostCalculations() {
         {/* Beregn knapp */}
         <div className="text-center mb-6">
           <button
+
             type="button"
             onClick={calculate}
+
             className="bg-blue-500 hover:bg-blue-600 text-white text-sm py-2 px-6 rounded transition"
           >
             Beregn kostnader
@@ -368,6 +414,7 @@ export default function CostCalculations() {
         </div>
 
         {/* 5. Resultater */}
+
         {results && (
           <section id="results">
             <h2 className="font-medium mb-3 border-b pb-1">5. Resultater</h2>
@@ -390,6 +437,7 @@ export default function CostCalculations() {
           </section>
         )}
       </div>
+
     </Layout>
   );
 }
