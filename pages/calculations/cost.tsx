@@ -239,10 +239,7 @@ export default function CostCalculations() {
           <button
             type="button"
             onClick={addTenant}
-          <div id="tenants" className="space-y-3" />
-          <button
             id="addTenant"
-
             className="mt-2 bg-blue-500 hover:bg-blue-600 text-white text-sm py-1 px-3 rounded transition"
           >
             + Legg til leietaker
@@ -330,7 +327,6 @@ export default function CostCalculations() {
             <div>
               <label className="block mb-1 text-sm">Spotpris forbruk (kr/kWh)</label>
               <input
-s
                 type="number"
                 step="0.01"
                 value={priceConsumption}
