@@ -1,7 +1,186 @@
+
+import { useState } from 'react';
 import Head from 'next/head';
 import Layout from '../../components/Layout';
 
+function TenantCard({ tenant, onChange, onRemove }) {
+  const handle = (field) => (e) => {
+    const value = field === 'name' ? e.target.value : parseFloat(e.target.value) || 0;
+    onChange({ ...tenant, [field]: value });
+  };
+
+  return (
+    <div className="relative border rounded p-3 bg-gray-50">
+      <button
+        type="button"
+        onClick={() => onRemove(tenant.id)}
+        className="absolute top-1 right-1 text-gray-500 hover:text-gray-700"
+      >
+        &times;
+      </button>
+      <label className="block text-sm mb-1">Navn</label>
+      <input
+        type="text"
+        value={tenant.name}
+        onChange={handle('name')}
+        className="w-full p-1 border rounded mb-1 focus:ring-blue-300 focus:outline-none"
+      />
+      <label className="block text-sm mb-1">Areal (m²)</label>
+      <input
+        type="number"
+        value={tenant.area}
+        onChange={handle('area')}
+        className="w-full p-1 border rounded mb-1 focus:ring-blue-300 focus:outline-none"
+      />
+      <label className="block text-sm mb-1">El-forbruk (kWh)</label>
+      <input
+        type="number"
+        value={tenant.el}
+        onChange={handle('el')}
+        className="w-full p-1 border rounded mb-1 focus:ring-blue-300 focus:outline-none"
+      />
+      <label className="block text-sm mb-1">Rabatt sol (%)</label>
+      <input
+        type="number"
+        value={tenant.discount}
+        onChange={handle('discount')}
+        className="w-full p-1 border rounded mb-2 focus:ring-blue-300 focus:outline-none text-sm"
+      />
+      <div className="grid grid-cols-2 gap-2 mt-2">
+        <div>
+          <label className="block text-sm">Fordel el</label>
+          <select
+            value={tenant.distE}
+            onChange={handle('distE')}
+            className="w-full p-1 border rounded focus:ring-blue-300 focus:outline-none text-xs"
+          >
+            <option value="consumption">Forbruk</option>
+            <option value="area">Areal</option>
+          </select>
+        </div>
+        <div>
+          <label className="block text-sm">Fordel sol</label>
+          <select
+            value={tenant.distP}
+            onChange={handle('distP')}
+            className="w-full p-1 border rounded focus:ring-blue-300 focus:outline-none text-xs"
+          >
+            <option value="consumption">Forbruk</option>
+            <option value="area">Areal</option>
+          </select>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 export default function CostCalculations() {
+  const [totalArea, setTotalArea] = useState(1000);
+  const [commonArea, setCommonArea] = useState(200);
+  const [totalElectric, setTotalElectric] = useState(12000);
+  const [totalThermal, setTotalThermal] = useState(8000);
+  const [totalWater, setTotalWater] = useState(120);
+  const [prodEnergy, setProdEnergy] = useState(4000);
+  const [exportEnergy, setExportEnergy] = useState(2500);
+  const [priceConsumption, setPriceConsumption] = useState(0.64);
+  const [priceProduction, setPriceProduction] = useState(0.64);
+  const [gridFixed, setGridFixed] = useState(300);
+  const [gridEnergy, setGridEnergy] = useState(0.3);
+  const [priceThermal, setPriceThermal] = useState(0.7);
+  const [priceWater, setPriceWater] = useState(50);
+
+  const [nextId, setNextId] = useState(2);
+  const [tenants, setTenants] = useState([
+    {
+      id: 0,
+      name: 'Butikk A',
+      area: 300,
+      el: 600,
+      discount: 0,
+      distE: 'consumption',
+      distP: 'consumption',
+    },
+    {
+      id: 1,
+      name: 'Kontor B',
+      area: 500,
+      el: 200,
+      discount: 0,
+      distE: 'consumption',
+      distP: 'consumption',
+    },
+  ]);
+
+  const [results, setResults] = useState(null);
+
+  const addTenant = () => {
+    setTenants([
+      ...tenants,
+      {
+        id: nextId,
+        name: '',
+        area: 100,
+        el: 1000,
+        discount: 0,
+        distE: 'consumption',
+        distP: 'consumption',
+      },
+    ]);
+    setNextId(nextId + 1);
+  };
+
+  const updateTenant = (updated) => {
+    setTenants(tenants.map((t) => (t.id === updated.id ? updated : t)));
+  };
+
+  const removeTenant = (id) => {
+    setTenants(tenants.filter((t) => t.id !== id));
+  };
+
+  const calculate = () => {
+    const TE = totalElectric;
+    const PE = prodEnergy;
+    const EE = exportEnergy;
+    const PC = priceConsumption;
+    const PP = priceProduction;
+    const PT = priceThermal;
+    const PW = priceWater;
+    const TT = totalThermal;
+    const TW = totalWater;
+
+    const selfConsumed = PE - EE;
+    const selfPercent = PE > 0 ? ((selfConsumed / PE) * 100).toFixed(1) : '0.0';
+
+    const tenantResults = tenants.map((t) => {
+      const areaPct = totalArea > 0 ? ((t.area / totalArea) * 100).toFixed(1) : '0.0';
+      const elCost =
+        t.distE === 'consumption'
+          ? (t.el / TE) * PC * TE
+          : (t.area / totalArea) * PC * TE;
+      const thCost = PT * TT;
+      const wCost = PW * TW;
+      const exportIncome = EE * PP;
+      const baseShare =
+        t.distP === 'consumption'
+          ? (t.el / TE) * exportIncome
+          : (t.area / totalArea) * exportIncome;
+      const exportShare = baseShare * (1 - t.discount / 100);
+      const total = elCost + thCost + wCost - exportShare;
+      return {
+        id: t.id,
+        name: t.name,
+        areaPct,
+        elCost,
+        exportShare,
+        discount: t.discount,
+        total,
+      };
+    });
+
+    setResults({ selfConsumed: selfConsumed.toFixed(1), selfPercent, tenantResults });
+  };
+
+
   return (
     <Layout>
       <Head>
@@ -22,18 +201,21 @@ export default function CostCalculations() {
             <div>
               <label className="block mb-1 text-sm">Totalt byggareal (m²)</label>
               <input
-                id="total_area"
+
                 type="number"
-                defaultValue="1000"
+                value={totalArea}
+                onChange={(e) => setTotalArea(parseFloat(e.target.value) || 0)}
+
                 className="w-full p-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-300"
               />
             </div>
             <div>
               <label className="block mb-1 text-sm">Fellesareal (m²)</label>
               <input
-                id="common_area"
                 type="number"
-                defaultValue="200"
+                value={commonArea}
+                onChange={(e) => setCommonArea(parseFloat(e.target.value) || 0)}
+
                 className="w-full p-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-300"
               />
             </div>
@@ -43,9 +225,24 @@ export default function CostCalculations() {
         {/* 2. Leietakere */}
         <section className="mb-6">
           <h2 className="font-medium mb-3 border-b pb-1">2. Leietakere</h2>
+
+          <div className="space-y-3">
+            {tenants.map((t) => (
+              <TenantCard
+                key={t.id}
+                tenant={t}
+                onChange={updateTenant}
+                onRemove={removeTenant}
+              />
+            ))}
+          </div>
+          <button
+            type="button"
+            onClick={addTenant}
           <div id="tenants" className="space-y-3" />
           <button
             id="addTenant"
+
             className="mt-2 bg-blue-500 hover:bg-blue-600 text-white text-sm py-1 px-3 rounded transition"
           >
             + Legg til leietaker
@@ -59,45 +256,67 @@ export default function CostCalculations() {
             <div>
               <label className="block mb-1 text-sm">El-forbruk (kWh/mnd)</label>
               <input
+
+                type="number"
+                value={totalElectric}
+                onChange={(e) => setTotalElectric(parseFloat(e.target.value) || 0)}
                 id="total_electric"
                 type="number"
                 defaultValue="12000"
+
                 className="w-full p-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-300"
               />
             </div>
             <div>
               <label className="block mb-1 text-sm">Termisk forbruk (kWh/mnd)</label>
               <input
+
+                type="number"
+                value={totalThermal}
+                onChange={(e) => setTotalThermal(parseFloat(e.target.value) || 0)}
+
                 id="total_thermal"
                 type="number"
                 defaultValue="8000"
+
                 className="w-full p-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-300"
               />
             </div>
             <div>
               <label className="block mb-1 text-sm">Vannforbruk (m³/mnd)</label>
               <input
+
+                type="number"
+                value={totalWater}
+                onChange={(e) => setTotalWater(parseFloat(e.target.value) || 0)}
                 id="total_water"
                 type="number"
                 defaultValue="120"
+
                 className="w-full p-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-300"
               />
             </div>
             <div>
               <label className="block mb-1 text-sm">Produsert solenergi (kWh/mnd)</label>
               <input
+
+                type="number"
+                value={prodEnergy}
+                onChange={(e) => setProdEnergy(parseFloat(e.target.value) || 0)}
                 id="prod_energy"
                 type="number"
                 defaultValue="4000"
+
                 className="w-full p-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-300"
               />
             </div>
             <div>
               <label className="block mb-1 text-sm">Eksportert energi (kWh/mnd)</label>
               <input
-                id="export_energy"
+
                 type="number"
-                defaultValue="2500"
+                value={exportEnergy}
+                onChange={(e) => setExportEnergy(parseFloat(e.target.value) || 0)}
                 className="w-full p-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-300"
               />
             </div>
@@ -111,58 +330,70 @@ export default function CostCalculations() {
             <div>
               <label className="block mb-1 text-sm">Spotpris forbruk (kr/kWh)</label>
               <input
-                id="price_consumption"
+s
                 type="number"
                 step="0.01"
-                defaultValue="0.64"
+                value={priceConsumption}
+                onChange={(e) => setPriceConsumption(parseFloat(e.target.value) || 0)}
+
                 className="w-full p-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-300"
               />
             </div>
             <div>
               <label className="block mb-1 text-sm">Spotpris produksjon (kr/kWh)</label>
               <input
-                id="price_production"
+
                 type="number"
                 step="0.01"
-                defaultValue="0.64"
+                value={priceProduction}
+                onChange={(e) => setPriceProduction(parseFloat(e.target.value) || 0)}
+
                 className="w-full p-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-300"
               />
             </div>
             <div>
               <label className="block mb-1 text-sm">Nettleie fastledd (kr/mnd)</label>
               <input
-                id="grid_fixed"
+
                 type="number"
-                defaultValue="300"
+                value={gridFixed}
+                onChange={(e) => setGridFixed(parseFloat(e.target.value) || 0)}
+
                 className="w-full p-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-300"
               />
             </div>
             <div>
               <label className="block mb-1 text-sm">Nettleie energiledd (kr/kWh)</label>
               <input
-                id="grid_energy"
+
                 type="number"
                 step="0.01"
-                defaultValue="0.30"
+                value={gridEnergy}
+                onChange={(e) => setGridEnergy(parseFloat(e.target.value) || 0)}
+
                 className="w-full p-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-300"
               />
             </div>
             <div>
               <label className="block mb-1 text-sm">Pris termisk energi (kr/kWh)</label>
               <input
-                id="price_thermal"
+
                 type="number"
                 step="0.01"
-                defaultValue="0.70"
+                value={priceThermal}
+                onChange={(e) => setPriceThermal(parseFloat(e.target.value) || 0)}
+
                 className="w-full p-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-300"
               />
             </div>
             <div>
               <label className="block mb-1 text-sm">Pris vann (kr/m³)</label>
               <input
-                id="price_water"
+
                 type="number"
-                defaultValue="50"
+                value={priceWater}
+                onChange={(e) => setPriceWater(parseFloat(e.target.value) || 0)}
+
                 className="w-full p-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-300"
               />
             </div>
@@ -172,7 +403,10 @@ export default function CostCalculations() {
         {/* Beregn knapp */}
         <div className="text-center mb-6">
           <button
-            id="calculateBtn"
+
+            type="button"
+            onClick={calculate}
+
             className="bg-blue-500 hover:bg-blue-600 text-white text-sm py-2 px-6 rounded transition"
           >
             Beregn kostnader
@@ -180,129 +414,30 @@ export default function CostCalculations() {
         </div>
 
         {/* 5. Resultater */}
-        <section id="results" className="hidden">
-          <h2 className="font-medium mb-3 border-b pb-1">5. Resultater</h2>
-          <div className="mb-4 p-3 bg-white rounded shadow">
-            <p className="text-sm">
-              <strong>Egenforbruk bygget:</strong>{' '}
-              <span id="self_consumed" /> kWh (<span id="self_percent" /> %)
-            </p>
-          </div>
-          <div id="cards" className="grid grid-cols-1 md:grid-cols-2 gap-4" />
-        </section>
+
+        {results && (
+          <section id="results">
+            <h2 className="font-medium mb-3 border-b pb-1">5. Resultater</h2>
+            <div className="mb-4 p-3 bg-white rounded shadow">
+              <p className="text-sm">
+                <strong>Egenforbruk bygget:</strong> {results.selfConsumed} kWh ({results.selfPercent} %)
+              </p>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              {results.tenantResults.map((r) => (
+                <div key={r.id} className="p-3 bg-white rounded shadow">
+                  <h3 className="font-semibold mb-1">{r.name}</h3>
+                  <p className="text-sm">Arealandel: {r.areaPct} %</p>
+                  <p className="text-sm">El-kostnad: {r.elCost.toFixed(1)} kr</p>
+                  <p className="text-sm">Produksjonsandel (rabatt {r.discount}%): -{r.exportShare.toFixed(1)} kr</p>
+                  <p className="font-semibold text-right">Totalt: {r.total.toFixed(1)} kr</p>
+                </div>
+              ))}
+            </div>
+          </section>
+        )}
       </div>
 
-      <script
-        dangerouslySetInnerHTML={{
-          __html: `
-    let tenantCount = 0;
-    const tenantContainer = document.getElementById('tenants');
-
-    function createTenantCard(data = {}) {
-      const id = tenantCount++;
-      const card = document.createElement('div');
-      card.className = 'relative border rounded p-3 bg-gray-50';
-      card.innerHTML = \`
-        <button data-id="\${id}" class="absolute top-1 right-1 text-gray-500 hover:text-gray-700">&times;</button>
-        <label class="block text-sm mb-1">Navn</label>
-        <input type="text" id="name_\${id}" value="\${data.name || ''}" class="w-full p-1 border rounded mb-1 focus:ring-blue-300 focus:outline-none" />
-        <label class="block text-sm mb-1">Areal (m²)</label>
-        <input type="number" id="area_\${id}" value="\${data.area || 100}" class="w-full p-1 border rounded mb-1 focus:ring-blue-300 focus:outline-none" />
-        <label class="block text-sm mb-1">El-forbruk (kWh)</label>
-        <input type="number" id="el_\${id}" value="\${data.el || 1000}" class="w-full p-1 border rounded mb-1 focus:ring-blue-300 focus:outline-none" />
-        <label class="block text-sm mb-1">Rabatt sol (%)</label>
-        <input type="number" id="discount_\${id}" value="0" class="w-full p-1 border rounded mb-2 focus:ring-blue-300 focus:outline-none text-sm" />
-        <div class="grid grid-cols-2 gap-2 mt-2">
-          <div>
-            <label class="block text-sm">Fordel el</label>
-            <select id="dist_e_\${id}" class="w-full p-1 border rounded focus:ring-blue-300 focus:outline-none text-xs">
-              <option value="consumption">Forbruk</option>
-              <option value="area">Areal</option>
-            </select>
-          </div>
-          <div>
-            <label class="block text-sm">Fordel sol</label>
-            <select id="dist_p_\${id}" class="w-full p-1 border rounded focus:ring-blue-300 focus:outline-none text-xs">
-              <option value="consumption">Forbruk</option>
-              <option value="area">Areal</option>
-            </select>
-          </div>
-        </div>
-      \`;
-      tenantContainer.appendChild(card);
-      card.querySelector('button').onclick = () => card.remove();
-    }
-
-    document.getElementById('addTenant').onclick = () => createTenantCard();
-    createTenantCard({ name: 'Butikk A', area: 300, el: 600 });
-    createTenantCard({ name: 'Kontor B', area: 500, el: 200 });
-
-    document.getElementById('calculateBtn').onclick = () => {
-      const TE = parseFloat(document.getElementById('total_electric').value);
-      const PE = parseFloat(document.getElementById('prod_energy').value);
-      const EE = parseFloat(document.getElementById('export_energy').value);
-      const PC = parseFloat(document.getElementById('price_consumption').value);
-      const PP = parseFloat(document.getElementById('price_production').value);
-      const PT = parseFloat(document.getElementById('price_thermal').value);
-      const PW = parseFloat(document.getElementById('price_water').value);
-      const TT = parseFloat(document.getElementById('total_thermal').value);
-      const TW = parseFloat(document.getElementById('total_water').value);
-
-      // Egenforbruk bygget
-      const selfConsumed = PE - EE;
-      const selfPercent = PE > 0 ? ((selfConsumed / PE) * 100).toFixed(1) : '0.0';
-      document.getElementById('self_consumed').textContent = selfConsumed.toFixed(1);
-      document.getElementById('self_percent').textContent = selfPercent;
-
-      const cardsDiv = document.getElementById('cards');
-      cardsDiv.innerHTML = '';
-
-      document.querySelectorAll('#tenants > div').forEach(card => {
-        const id = card.querySelector('button').dataset.id;
-        const name = document.getElementById('name_' + id).value;
-        const area = parseFloat(document.getElementById('area_' + id).value);
-        const el = parseFloat(document.getElementById('el_' + id).value);
-        const discount =
-          parseFloat(document.getElementById('discount_' + id).value) / 100;
-        const distE = document.getElementById(`dist_e_\${id}`).value;
-        const distP = document.getElementById(`dist_p_\${id}`).value;
-
-        const totalArea = parseFloat(document.getElementById('total_area').value);
-        const areaPct = totalArea > 0 ? ((area / totalArea) * 100).toFixed(1) : '0.0';
-
-        const elCost =
-          distE === 'consumption' ? (el / TE) * PC * TE : (area / totalArea) * PC * TE;
-        const thCost = (thermal => (thermal / TT) * PT * TT)(
-          parseFloat(document.getElementById('total_thermal').value)
-        );
-        const wCost = (water => (water / TW) * PW * TW)(
-          parseFloat(document.getElementById('total_water').value)
-        );
-        const exportIncome = EE * PP;
-        const baseShare =
-          distP === 'consumption'
-            ? (el / TE) * exportIncome
-            : (area / totalArea) * exportIncome;
-        const exportShare = baseShare * (1 - discount);
-        const total = elCost + thCost + wCost - exportShare;
-
-        const div = document.createElement('div');
-        div.className = 'p-3 bg-white rounded shadow';
-        div.innerHTML = \`
-          <h3 class="font-semibold mb-1">\${name}</h3>
-          <p class="text-sm">Arealandel: \${areaPct} %</p>
-          <p class="text-sm">El-kostnad: \${elCost.toFixed(1)} kr</p>
-          <p class="text-sm">Produksjonsandel (rabatt \${(discount * 100).toFixed(0)}%): -\${exportShare.toFixed(1)} kr</p>
-          <p class="font-semibold text-right">Totalt: \${total.toFixed(1)} kr</p>
-        \`;
-        cardsDiv.appendChild(div);
-      });
-
-      document.getElementById('results').classList.remove('hidden');
-    };
-  `,
-        }}
-      />
     </Layout>
   );
 }
