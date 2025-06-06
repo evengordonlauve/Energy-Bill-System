@@ -4,7 +4,8 @@ This repository now provides a very small Next.js skeleton with placeholder page
 
 ## Setup
 
-1. Install dependencies (requires network access):
+1. Install dependencies (requires network access). This will also install the
+   TypeScript dev dependencies specified in `package.json`:
    ```bash
    npm install
    ```
