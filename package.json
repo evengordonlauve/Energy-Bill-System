@@ -16,7 +16,6 @@
     "node": ">=18.x"
   },
   "devDependencies": {
-    "autoprefixer": "^10.4.21",
     "typescript": "^5.2.2",
     "@types/react": "^18.2.0",
     "@types/node": "^18.17.0"
