@@ -1,16 +1,16 @@
-import { useState } from 'react';
+import { FormEvent, ChangeEvent, useState } from 'react';
 import { useRouter } from 'next/router';
 import { useAuth } from '../contexts/AuthContext';
 import '../styles/login.css';
 
 export default function Login() {
   const router = useRouter();
-  const { login } = useAuth();
+  const { login } = useAuth() as any;
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (!email || !password) {
       setError('Please fill in both fields');
@@ -39,7 +39,9 @@ export default function Login() {
               type="email"
               placeholder="your.email@company.com"
               value={email}
-              onChange={(e) => setEmail(e.target.value)}
+              onChange={(e: ChangeEvent<HTMLInputElement>) =>
+                setEmail(e.target.value)
+              }
             />
           </div>
           <div className="form-group">
@@ -48,7 +50,9 @@ export default function Login() {
               id="password"
               type="password"
               value={password}
-              onChange={(e) => setPassword(e.target.value)}
+              onChange={(e: ChangeEvent<HTMLInputElement>) =>
+                setPassword(e.target.value)
+              }
             />
           </div>
           {error && <p className="error">{error}</p>}

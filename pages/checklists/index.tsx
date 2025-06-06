@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { FormEvent, ChangeEvent, useState } from 'react';
 import Layout from '../../components/Layout';
 
 const initialItems = [
@@ -10,14 +10,14 @@ export default function Checklists() {
   const [items, setItems] = useState(initialItems);
   const [task, setTask] = useState('');
 
-  const addItem = (e) => {
+  const addItem = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (!task.trim()) return;
     setItems([...items, { id: Date.now(), text: task.trim(), done: false }]);
     setTask('');
   };
 
-  const toggleItem = (id) => {
+  const toggleItem = (id: number) => {
     setItems(items.map((it) => (it.id === id ? { ...it, done: !it.done } : it)));
   };
 
@@ -30,7 +30,7 @@ export default function Checklists() {
           id="task"
           type="text"
           value={task}
-          onChange={(e) => setTask(e.target.value)}
+          onChange={(e: ChangeEvent<HTMLInputElement>) => setTask(e.target.value)}
         />
         <button type="submit" className="button">Add</button>
       </form>

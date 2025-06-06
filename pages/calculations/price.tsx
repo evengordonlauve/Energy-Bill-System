@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { ChangeEvent, useState } from 'react';
 import Layout from '../../components/Layout';
 
 const defaultItems = [
@@ -10,7 +10,7 @@ const defaultItems = [
 export default function PriceLists() {
   const [items, setItems] = useState(defaultItems);
 
-  const updateQty = (id, qty) => {
+  const updateQty = (id: string, qty: number) => {
     setItems(items.map((it) => (it.id === id ? { ...it, qty } : it)));
   };
 
@@ -36,7 +36,9 @@ export default function PriceLists() {
                 <input
                   type="number"
                   value={it.qty}
-                  onChange={(e) => updateQty(it.id, parseInt(e.target.value) || 0)}
+                  onChange={(e: ChangeEvent<HTMLInputElement>) =>
+                    updateQty(it.id, parseInt(e.target.value) || 0)
+                  }
                   style={{ width: '60px' }}
                 />
               </td>
