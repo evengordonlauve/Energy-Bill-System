@@ -203,26 +203,26 @@ export default function CostCalculations() {
       const card = document.createElement('div');
       card.className = 'relative border rounded p-3 bg-gray-50';
       card.innerHTML = \`
-        <button data-id="${id}" class="absolute top-1 right-1 text-gray-500 hover:text-gray-700">&times;</button>
+        <button data-id="\${id}" class="absolute top-1 right-1 text-gray-500 hover:text-gray-700">&times;</button>
         <label class="block text-sm mb-1">Navn</label>
-        <input type="text" id="name_${id}" value="${data.name || ''}" class="w-full p-1 border rounded mb-1 focus:ring-blue-300 focus:outline-none" />
+        <input type="text" id="name_\${id}" value="\${data.name || ''}" class="w-full p-1 border rounded mb-1 focus:ring-blue-300 focus:outline-none" />
         <label class="block text-sm mb-1">Areal (m²)</label>
-        <input type="number" id="area_${id}" value="${data.area || 100}" class="w-full p-1 border rounded mb-1 focus:ring-blue-300 focus:outline-none" />
+        <input type="number" id="area_\${id}" value="\${data.area || 100}" class="w-full p-1 border rounded mb-1 focus:ring-blue-300 focus:outline-none" />
         <label class="block text-sm mb-1">El-forbruk (kWh)</label>
-        <input type="number" id="el_${id}" value="${data.el || 1000}" class="w-full p-1 border rounded mb-1 focus:ring-blue-300 focus:outline-none" />
+        <input type="number" id="el_\${id}" value="\${data.el || 1000}" class="w-full p-1 border rounded mb-1 focus:ring-blue-300 focus:outline-none" />
         <label class="block text-sm mb-1">Rabatt sol (%)</label>
-        <input type="number" id="discount_${id}" value="0" class="w-full p-1 border rounded mb-2 focus:ring-blue-300 focus:outline-none text-sm" />
+        <input type="number" id="discount_\${id}" value="0" class="w-full p-1 border rounded mb-2 focus:ring-blue-300 focus:outline-none text-sm" />
         <div class="grid grid-cols-2 gap-2 mt-2">
           <div>
             <label class="block text-sm">Fordel el</label>
-            <select id="dist_e_${id}" class="w-full p-1 border rounded focus:ring-blue-300 focus:outline-none text-xs">
+            <select id="dist_e_\${id}" class="w-full p-1 border rounded focus:ring-blue-300 focus:outline-none text-xs">
               <option value="consumption">Forbruk</option>
               <option value="area">Areal</option>
             </select>
           </div>
           <div>
             <label class="block text-sm">Fordel sol</label>
-            <select id="dist_p_${id}" class="w-full p-1 border rounded focus:ring-blue-300 focus:outline-none text-xs">
+            <select id="dist_p_\${id}" class="w-full p-1 border rounded focus:ring-blue-300 focus:outline-none text-xs">
               <option value="consumption">Forbruk</option>
               <option value="area">Areal</option>
             </select>
@@ -257,12 +257,12 @@ export default function CostCalculations() {
 
       document.querySelectorAll('#tenants > div').forEach(card => {
         const id = card.querySelector('button').dataset.id;
-        const name = document.getElementById(`name_${id}`).value;
-        const area = parseFloat(document.getElementById(`area_${id}`).value);
-        const el = parseFloat(document.getElementById(`el_${id}`).value);
-        const discount = parseFloat(document.getElementById(`discount_${id}`).value) / 100;
-        const distE = document.getElementById(`dist_e_${id}`).value;
-        const distP = document.getElementById(`dist_p_${id}`).value;
+        const name = document.getElementById(`name_\${id}`).value;
+        const area = parseFloat(document.getElementById(`area_\${id}`).value);
+        const el = parseFloat(document.getElementById(`el_\${id}`).value);
+        const discount = parseFloat(document.getElementById(`discount_\${id}`).value) / 100;
+        const distE = document.getElementById(`dist_e_\${id}`).value;
+        const distP = document.getElementById(`dist_p_\${id}`).value;
 
         const totalArea = parseFloat(document.getElementById('total_area').value);
         const areaPct = totalArea > 0 ? ((area / totalArea) * 100).toFixed(1) : '0.0';
