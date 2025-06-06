@@ -1,5 +1,5 @@
 
-import { useState } from 'react';
+import React, { useState } from 'react';
 import Head from 'next/head';
 import Layout from '../../components/Layout';
 
@@ -19,10 +19,13 @@ interface TenantCardProps {
   onRemove: (id: number) => void;
 }
 function TenantCard({ tenant, onChange, onRemove }: TenantCardProps) {
-  const handle = (field) => (e) => {
-    const value = field === 'name' ? e.target.value : parseFloat(e.target.value) || 0;
-    onChange({ ...tenant, [field]: value });
-  };
+  const handle =
+    (field: keyof Tenant) =>
+    (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+      const value =
+        field === 'name' ? e.target.value : parseFloat(e.target.value) || 0;
+      onChange({ ...tenant, [field]: value });
+    };
 
   return (
     <div className="relative border rounded p-3 bg-gray-50">
