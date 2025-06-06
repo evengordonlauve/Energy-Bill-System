@@ -259,10 +259,10 @@ export default function CostCalculations() {
 
       document.querySelectorAll('#tenants > div').forEach(card => {
         const id = card.querySelector('button').dataset.id;
-        const name = document.getElementById(`name_\${id}`).value;
-        const area = parseFloat(document.getElementById(`area_\${id}`).value);
-        const el = parseFloat(document.getElementById(`el_\${id}`).value);
-        const discount = parseFloat(document.getElementById(`discount_\${id}`).value) / 100;
+        const name = document.getElementById(`name_${id}`).value;
+        const area = parseFloat(document.getElementById(`area_${id}`).value);
+        const el = parseFloat(document.getElementById(`el_${id}`).value);
+        const discount = parseFloat(document.getElementById(`discount_${id}`).value) / 100;
         const distE = document.getElementById(`dist_e_\${id}`).value;
         const distP = document.getElementById(`dist_p_\${id}`).value;
 
