@@ -1,11 +1,11 @@
-import { useState } from 'react';
+import { FormEvent, ChangeEvent, useState } from 'react';
 import Layout from '../../components/Layout';
 
 export default function Settings() {
   const [title, setTitle] = useState('Calculation Portal');
   const [enableReg, setEnableReg] = useState(false);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     alert('Demo save not implemented');
   };
@@ -20,7 +20,9 @@ export default function Settings() {
             id="title"
             type="text"
             value={title}
-            onChange={(e) => setTitle(e.target.value)}
+            onChange={(e: ChangeEvent<HTMLInputElement>) =>
+              setTitle(e.target.value)
+            }
           />
         </div>
         <div className="form-group">
@@ -28,7 +30,9 @@ export default function Settings() {
             <input
               type="checkbox"
               checked={enableReg}
-              onChange={(e) => setEnableReg(e.target.checked)}
+              onChange={(e: ChangeEvent<HTMLInputElement>) =>
+                setEnableReg(e.target.checked)
+              }
             />
             Enable User Registration
           </label>
