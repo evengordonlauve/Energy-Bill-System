@@ -3,7 +3,22 @@ import { useState } from 'react';
 import Head from 'next/head';
 import Layout from '../../components/Layout';
 
-function TenantCard({ tenant, onChange, onRemove }) {
+interface Tenant {
+  id: number;
+  name: string;
+  area: number;
+  el: number;
+  discount: number;
+  distE: 'consumption' | 'area';
+  distP: 'consumption' | 'area';
+}
+
+interface TenantCardProps {
+  tenant: Tenant;
+  onChange: (tenant: Tenant) => void;
+  onRemove: (id: number) => void;
+}
+function TenantCard({ tenant, onChange, onRemove }: TenantCardProps) {
   const handle = (field) => (e) => {
     const value = field === 'name' ? e.target.value : parseFloat(e.target.value) || 0;
     onChange({ ...tenant, [field]: value });
@@ -90,7 +105,7 @@ export default function CostCalculations() {
   const [priceWater, setPriceWater] = useState(50);
 
   const [nextId, setNextId] = useState(2);
-  const [tenants, setTenants] = useState([
+  const [tenants, setTenants] = useState<Tenant[]>([
     {
       id: 0,
       name: 'Butikk A',
@@ -129,11 +144,11 @@ export default function CostCalculations() {
     setNextId(nextId + 1);
   };
 
-  const updateTenant = (updated) => {
+  const updateTenant = (updated: Tenant) => {
     setTenants(tenants.map((t) => (t.id === updated.id ? updated : t)));
   };
 
-  const removeTenant = (id) => {
+  const removeTenant = (id: number) => {
     setTenants(tenants.filter((t) => t.id !== id));
   };
 
