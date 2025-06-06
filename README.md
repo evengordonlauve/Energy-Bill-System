@@ -2,6 +2,11 @@
 
 This repository now provides a very small Next.js skeleton with placeholder pages for a Dashboard, Customers, Cost Calculations, Checklists and Administration. The site is automatically deployed to Azure via GitHub Actions.
 
+## Recent Changes
+
+* Removed the unused `Figma design` prototype directory.
+* Dropped `autoprefixer` and the custom `postcss.config.js` since Next.js already handles vendor prefixing.
+
 ## Setup
 
 1. Install dependencies (requires network access). This will also install the
