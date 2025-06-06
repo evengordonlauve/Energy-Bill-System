@@ -286,11 +286,11 @@ export default function CostCalculations() {
         const div = document.createElement('div');
         div.className = 'p-3 bg-white rounded shadow';
         div.innerHTML = \`
-          <h3 class="font-semibold mb-1">\${name}</h3>
-          <p class="text-sm">Arealandel: \${areaPct} %</p>
-          <p class="text-sm">El-kostnad: \${elCost.toFixed(1)} kr</p>
-          <p class="text-sm">Produksjonsandel (rabatt \${(discount * 100).toFixed(0)}%): -\${exportShare.toFixed(1)} kr</p>
-          <p class="font-semibold text-right">Totalt: \${total.toFixed(1)} kr</p>
+          <h3 class="font-semibold mb-1">${name}</h3>
+          <p class="text-sm">Arealandel: ${areaPct} %</p>
+          <p class="text-sm">El-kostnad: ${elCost.toFixed(1)} kr</p>
+          <p class="text-sm">Produksjonsandel (rabatt ${(discount * 100).toFixed(0)}%): -${exportShare.toFixed(1)} kr</p>
+          <p class="font-semibold text-right">Totalt: ${total.toFixed(1)} kr</p>
         \`;
         cardsDiv.appendChild(div);
       });
