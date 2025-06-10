@@ -1,24 +1,32 @@
-import { FormEvent, ChangeEvent, useState } from 'react';
-import Layout from '../../components/Layout';
+import { FormEvent, ChangeEvent, useState } from "react";
+import Layout from "../../components/Layout";
 
-const initialItems = [
-  { id: 1, text: 'Inspect ventilation system', done: false },
-  { id: 2, text: 'Check heating controls', done: false },
+interface ChecklistItem {
+  id: number;
+  text: string;
+  done: boolean;
+}
+
+const initialItems: ChecklistItem[] = [
+  { id: 1, text: "Inspect ventilation system", done: false },
+  { id: 2, text: "Check heating controls", done: false },
 ];
 
 export default function Checklists() {
-  const [items, setItems] = useState(initialItems);
-  const [task, setTask] = useState('');
+  const [items, setItems] = useState<ChecklistItem[]>(initialItems);
+  const [task, setTask] = useState<string>("");
 
   const addItem = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (!task.trim()) return;
     setItems([...items, { id: Date.now(), text: task.trim(), done: false }]);
-    setTask('');
+    setTask("");
   };
 
   const toggleItem = (id: number) => {
-    setItems(items.map((it) => (it.id === id ? { ...it, done: !it.done } : it)));
+    setItems(
+      items.map((it) => (it.id === id ? { ...it, done: !it.done } : it)),
+    );
   };
 
   return (
@@ -30,9 +38,13 @@ export default function Checklists() {
           id="task"
           type="text"
           value={task}
-          onChange={(e: ChangeEvent<HTMLInputElement>) => setTask(e.target.value)}
+          onChange={(e: ChangeEvent<HTMLInputElement>) =>
+            setTask(e.target.value)
+          }
         />
-        <button type="submit" className="button">Add</button>
+        <button type="submit" className="button">
+          Add
+        </button>
       </form>
       <ul>
         {items.map((item) => (

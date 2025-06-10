@@ -1,25 +1,36 @@
-import { useState } from 'react';
-import Layout from '../../components/Layout';
+import { useState } from "react";
+import Layout from "../../components/Layout";
 
-const sampleCustomers = [
+interface Customer {
+  id: number;
+  name: string;
+  org: string;
+  contact: {
+    name: string;
+    email: string;
+  };
+  assets: number;
+}
+
+const sampleCustomers: Customer[] = [
   {
     id: 1,
-    name: 'Acme Corp',
-    org: '123456789',
-    contact: { name: 'John Doe', email: 'john@example.com' },
+    name: "Acme Corp",
+    org: "123456789",
+    contact: { name: "John Doe", email: "john@example.com" },
     assets: 3,
   },
   {
     id: 2,
-    name: 'Globex LLC',
-    org: '987654321',
-    contact: { name: 'Jane Smith', email: 'jane@example.com' },
+    name: "Globex LLC",
+    org: "987654321",
+    contact: { name: "Jane Smith", email: "jane@example.com" },
     assets: 1,
   },
 ];
 
 export default function Customers() {
-  const [customers] = useState(sampleCustomers);
+  const [customers] = useState<Customer[]>(sampleCustomers);
 
   return (
     <Layout>
