@@ -303,7 +303,6 @@ export default function CostCalculations() {
                   setTotalElectric(parseFloat(e.target.value) || 0)
                 }
                 id="total_electric"
-                type="number"
                 defaultValue="12000"
                 className="w-full p-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-300"
               />
@@ -319,7 +318,6 @@ export default function CostCalculations() {
                   setTotalThermal(parseFloat(e.target.value) || 0)
                 }
                 id="total_thermal"
-                type="number"
                 defaultValue="8000"
                 className="w-full p-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-300"
               />
@@ -333,7 +331,6 @@ export default function CostCalculations() {
                   setTotalWater(parseFloat(e.target.value) || 0)
                 }
                 id="total_water"
-                type="number"
                 defaultValue="120"
                 className="w-full p-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-300"
               />
@@ -349,7 +346,6 @@ export default function CostCalculations() {
                   setProdEnergy(parseFloat(e.target.value) || 0)
                 }
                 id="prod_energy"
-                type="number"
                 defaultValue="4000"
                 className="w-full p-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-300"
               />
