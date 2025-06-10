@@ -1,27 +1,27 @@
-import { FormEvent, ChangeEvent, useState } from 'react';
-import { useRouter } from 'next/router';
-import { useAuth } from '../contexts/AuthContext';
-import '../styles/login.css';
+import { FormEvent, ChangeEvent, useState } from "react";
+import { useRouter } from "next/router";
+import { useAuth } from "../contexts/AuthContext";
+import "../styles/login.css";
 
 export default function Login() {
   const router = useRouter();
   const { login } = useAuth() as any;
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [error, setError] = useState('');
+  const [email, setEmail] = useState<string>("");
+  const [password, setPassword] = useState<string>("");
+  const [error, setError] = useState<string>("");
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (!email || !password) {
-      setError('Please fill in both fields');
+      setError("Please fill in both fields");
       return;
     }
     const success = await login(email, password);
     if (success) {
-      setError('');
-      router.push('/');
+      setError("");
+      router.push("/");
     } else {
-      setError('Invalid email or password');
+      setError("Invalid email or password");
     }
   };
 
@@ -56,7 +56,9 @@ export default function Login() {
             />
           </div>
           {error && <p className="error">{error}</p>}
-          <button type="submit" className="button">Sign In</button>
+          <button type="submit" className="button">
+            Sign In
+          </button>
         </form>
         <p className="footer">Demo credentials: admin@example.com / admin123</p>
       </div>

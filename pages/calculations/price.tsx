@@ -1,14 +1,31 @@
-import { ChangeEvent, useState } from 'react';
-import Layout from '../../components/Layout';
+import { ChangeEvent, useState } from "react";
+import Layout from "../../components/Layout";
 
-const defaultItems = [
-  { id: '1', description: 'Grunpakke AES (pr bygg)', pricePerYear: 2880, qty: 0 },
-  { id: '2', description: 'Ekstra Ethub målepunkt', pricePerYear: 1440, qty: 0 },
-  { id: '3', description: 'Gateway for sensorer', pricePerYear: 720, qty: 0 },
+interface PriceItem {
+  id: string;
+  description: string;
+  pricePerYear: number;
+  qty: number;
+}
+
+const defaultItems: PriceItem[] = [
+  {
+    id: "1",
+    description: "Grunpakke AES (pr bygg)",
+    pricePerYear: 2880,
+    qty: 0,
+  },
+  {
+    id: "2",
+    description: "Ekstra Ethub målepunkt",
+    pricePerYear: 1440,
+    qty: 0,
+  },
+  { id: "3", description: "Gateway for sensorer", pricePerYear: 720, qty: 0 },
 ];
 
 export default function PriceLists() {
-  const [items, setItems] = useState(defaultItems);
+  const [items, setItems] = useState<PriceItem[]>(defaultItems);
 
   const updateQty = (id: string, qty: number) => {
     setItems(items.map((it) => (it.id === id ? { ...it, qty } : it)));
@@ -39,7 +56,7 @@ export default function PriceLists() {
                   onChange={(e: ChangeEvent<HTMLInputElement>) =>
                     updateQty(it.id, parseInt(e.target.value) || 0)
                   }
-                  style={{ width: '60px' }}
+                  style={{ width: "60px" }}
                 />
               </td>
             </tr>
