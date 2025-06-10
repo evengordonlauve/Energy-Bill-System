@@ -1,13 +1,13 @@
-import { FormEvent, ChangeEvent, useState } from 'react';
-import Layout from '../../components/Layout';
+import { FormEvent, ChangeEvent, useState } from "react";
+import Layout from "../../components/Layout";
 
 export default function Settings() {
-  const [title, setTitle] = useState('Calculation Portal');
-  const [enableReg, setEnableReg] = useState(false);
+  const [title, setTitle] = useState<string>("Calculation Portal");
+  const [enableReg, setEnableReg] = useState<boolean>(false);
 
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    alert('Demo save not implemented');
+    alert("Demo save not implemented");
   };
 
   return (
@@ -37,7 +37,9 @@ export default function Settings() {
             Enable User Registration
           </label>
         </div>
-        <button type="submit" className="button">Save</button>
+        <button type="submit" className="button">
+          Save
+        </button>
       </form>
     </Layout>
   );
