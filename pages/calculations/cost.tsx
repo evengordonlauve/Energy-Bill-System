@@ -8,8 +8,12 @@ interface Tenant {
   area: number;
   el: number;
   discount: number;
-  distE: "consumption" | "area";
-  distP: "consumption" | "area";
+  /**
+   * 1 - arealfordeling
+   * 2 - forbruksfordeling
+   * 3 - AMS-fordeling
+   */
+  type: number;
 }
 
 interface TenantResult {
@@ -37,8 +41,8 @@ function TenantCard({ tenant, onChange, onRemove }: TenantCardProps) {
   const handle =
     (field: keyof Tenant) =>
     (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
-      const value =
-        field === "name" ? e.target.value : parseFloat(e.target.value) || 0;
+      const raw = e.target.value;
+      const value = field === "name" ? raw : parseFloat(raw) || 0;
       onChange({ ...tenant, [field]: value });
     };
 
@@ -79,29 +83,17 @@ function TenantCard({ tenant, onChange, onRemove }: TenantCardProps) {
         onChange={handle("discount")}
         className="w-full p-1 border rounded mb-2 focus:ring-blue-300 focus:outline-none text-sm"
       />
-      <div className="grid grid-cols-2 gap-2 mt-2">
-        <div>
-          <label className="block text-sm">Fordel el</label>
-          <select
-            value={tenant.distE}
-            onChange={handle("distE")}
-            className="w-full p-1 border rounded focus:ring-blue-300 focus:outline-none text-xs"
-          >
-            <option value="consumption">Forbruk</option>
-            <option value="area">Areal</option>
-          </select>
-        </div>
-        <div>
-          <label className="block text-sm">Fordel sol</label>
-          <select
-            value={tenant.distP}
-            onChange={handle("distP")}
-            className="w-full p-1 border rounded focus:ring-blue-300 focus:outline-none text-xs"
-          >
-            <option value="consumption">Forbruk</option>
-            <option value="area">Areal</option>
-          </select>
-        </div>
+      <div className="mt-2">
+        <label className="block text-sm">Leietakertype</label>
+        <select
+          value={tenant.type}
+          onChange={handle("type")}
+          className="w-full p-1 border rounded focus:ring-blue-300 focus:outline-none text-xs"
+        >
+          <option value={1}>Arealfordeling</option>
+          <option value={2}>Forbruksfordeling</option>
+          <option value={3}>AMS-fordeling</option>
+        </select>
       </div>
     </div>
   );
@@ -130,8 +122,7 @@ export default function CostCalculations() {
       area: 300,
       el: 600,
       discount: 0,
-      distE: "consumption",
-      distP: "consumption",
+      type: 2,
     },
     {
       id: 1,
@@ -139,8 +130,7 @@ export default function CostCalculations() {
       area: 500,
       el: 200,
       discount: 0,
-      distE: "consumption",
-      distP: "consumption",
+      type: 2,
     },
   ]);
 
@@ -155,8 +145,7 @@ export default function CostCalculations() {
         area: 100,
         el: 1000,
         discount: 0,
-        distE: "consumption",
-        distP: "consumption",
+        type: 2,
       },
     ]);
     setNextId(nextId + 1);
@@ -187,15 +176,16 @@ export default function CostCalculations() {
     const tenantResults = tenants.map((t) => {
       const areaPct =
         totalArea > 0 ? ((t.area / totalArea) * 100).toFixed(1) : "0.0";
+      const method = t.type === 1 ? "area" : "consumption";
       const elCost =
-        t.distE === "consumption"
+        method === "consumption"
           ? (t.el / TE) * PC * TE
           : (t.area / totalArea) * PC * TE;
       const thCost = PT * TT;
       const wCost = PW * TW;
       const exportIncome = EE * PP;
       const baseShare =
-        t.distP === "consumption"
+        method === "consumption"
           ? (t.el / TE) * exportIncome
           : (t.area / totalArea) * exportIncome;
       const exportShare = baseShare * (1 - t.discount / 100);
