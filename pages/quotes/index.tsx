@@ -19,13 +19,19 @@ export default function QuoteList() {
           </tr>
         </thead>
         <tbody>
-          {quotes.map(q => (
-            <tr key={q.id}>
-              <td>{q.name}</td>
-              <td>{q.seller}</td>
-              <td>{q.customerName}</td>
+          {quotes.length === 0 ? (
+            <tr>
+              <td colSpan={3}>No quotes saved yet.</td>
             </tr>
-          ))}
+          ) : (
+            quotes.map((q) => (
+              <tr key={q.id}>
+                <td>{q.name}</td>
+                <td>{q.seller}</td>
+                <td>{q.customerName}</td>
+              </tr>
+            ))
+          )}
         </tbody>
       </table>
     </Layout>
