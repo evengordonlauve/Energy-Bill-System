@@ -16,7 +16,7 @@ interface LayoutProps {
 }
 
 export default function Layout({ children }: LayoutProps) {
-  const { isAuthenticated, user, logout } = useAuth() as any;
+  const { isAuthenticated, user, logout } = useAuth();
   return (
     <>
       <header className="header">
