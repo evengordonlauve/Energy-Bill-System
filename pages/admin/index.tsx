@@ -16,6 +16,11 @@ export default function AdminHome() {
           <p>System configuration.</p>
           <Link href="/admin/settings">Open</Link>
         </div>
+        <div className="card">
+          <h3>Checklist Tool</h3>
+          <p>Create new checklists.</p>
+          <Link href="/admin/checklists">Open</Link>
+        </div>
       </div>
     </Layout>
   );

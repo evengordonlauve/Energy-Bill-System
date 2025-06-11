@@ -1,65 +1,105 @@
-import { FormEvent, ChangeEvent, useState } from "react";
+import { useState, useEffect, ChangeEvent, FormEvent } from "react";
 import Layout from "../../components/Layout";
+import { useAuth } from "../../contexts/AuthContext";
 
-interface ChecklistItem {
+interface Checklist {
   id: number;
-  text: string;
+  title: string;
   done: boolean;
+  doneBy?: string;
+  doneAt?: string;
 }
 
-const initialItems: ChecklistItem[] = [
-  { id: 1, text: "Inspect ventilation system", done: false },
-  { id: 2, text: "Check heating controls", done: false },
-];
+const STORAGE_KEY = "checklists";
 
 export default function Checklists() {
-  const [items, setItems] = useState<ChecklistItem[]>(initialItems);
-  const [task, setTask] = useState<string>("");
+  const { user } = useAuth();
+  const [checklists, setChecklists] = useState<Checklist[]>([]);
+  const [editTitles, setEditTitles] = useState<Record<number, string>>({});
 
-  const addItem = (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    if (!task.trim()) return;
-    setItems([...items, { id: Date.now(), text: task.trim(), done: false }]);
-    setTask("");
+  const [loaded, setLoaded] = useState(false);
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const stored = localStorage.getItem(STORAGE_KEY);
+      if (stored) {
+        setChecklists(JSON.parse(stored) as Checklist[]);
+      }
+      setLoaded(true);
+    }
+  }, []);
+
+  useEffect(() => {
+    if (loaded && typeof window !== "undefined") {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(checklists));
+    }
+  }, [checklists, loaded]);
+
+  const toggleDone = (id: number) => {
+    setChecklists((prev) =>
+      prev.map((c) => {
+        if (c.id !== id) return c;
+        if (c.done) {
+          return { id: c.id, title: c.title, done: false };
+        }
+        return {
+          ...c,
+          done: true,
+          doneBy: user?.name || "Unknown",
+          doneAt: new Date().toISOString(),
+        };
+      }),
+    );
   };
 
-  const toggleItem = (id: number) => {
-    setItems(
-      items.map((it) => (it.id === id ? { ...it, done: !it.done } : it)),
+  const handleEditChange = (id: number, val: string) => {
+    setEditTitles((prev) => ({ ...prev, [id]: val }));
+  };
+
+  const saveTitle = (id: number) => {
+    setChecklists((prev) =>
+      prev.map((c) => (c.id === id ? { ...c, title: editTitles[id] ?? c.title } : c)),
     );
   };
 
   return (
     <Layout>
       <h1>Checklists</h1>
-      <form onSubmit={addItem} className="form-group">
-        <label htmlFor="task">New Task</label>
-        <input
-          id="task"
-          type="text"
-          value={task}
-          onChange={(e: ChangeEvent<HTMLInputElement>) =>
-            setTask(e.target.value)
-          }
-        />
-        <button type="submit" className="button">
-          Add
-        </button>
-      </form>
+      <h2>Available</h2>
       <ul>
-        {items.map((item) => (
-          <li key={item.id}>
-            <label>
-              <input
-                type="checkbox"
-                checked={item.done}
-                onChange={() => toggleItem(item.id)}
-              />
-              {item.text}
-            </label>
+        {checklists.filter((c) => !c.done).map((c) => (
+          <li key={c.id}>
+            {c.title}{" "}
+            <button className="button" onClick={() => toggleDone(c.id)}>
+              Mark Done
+            </button>
+          </li>
+        ))}
+      </ul>
+      <h2>Completed</h2>
+      <ul>
+        {checklists.filter((c) => c.done).map((c) => (
+          <li key={c.id}>
+            <input
+              type="text"
+              value={editTitles[c.id] ?? c.title}
+              onChange={(e: ChangeEvent<HTMLInputElement>) =>
+                handleEditChange(c.id, e.target.value)
+              }
+            />
+            <button className="button" onClick={() => saveTitle(c.id)}>
+              Save
+            </button>
+            <button className="button" onClick={() => toggleDone(c.id)}>
+              Undo
+            </button>
+            <div className="small">
+              Signed {c.doneBy} on {new Date(c.doneAt || "").toLocaleString()}
+            </div>
           </li>
         ))}
       </ul>
     </Layout>
   );
 }
+
