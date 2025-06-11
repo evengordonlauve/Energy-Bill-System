@@ -6,6 +6,7 @@ This repository now provides a very small Next.js skeleton with placeholder page
 
 * Removed the unused `Figma design` prototype directory.
 * Dropped `autoprefixer` and the custom `postcss.config.js` since Next.js already handles vendor prefixing.
+* Added an admin-only checklist tool to create new checklists stored in localStorage.
 
 ## Setup
 
