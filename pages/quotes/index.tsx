@@ -16,12 +16,13 @@ export default function QuoteList() {
             <th>Name</th>
             <th>Seller</th>
             <th>Customer</th>
+            <th>Total / year</th>
           </tr>
         </thead>
         <tbody>
           {quotes.length === 0 ? (
             <tr>
-              <td colSpan={3}>No quotes saved yet.</td>
+              <td colSpan={4}>No quotes saved yet.</td>
             </tr>
           ) : (
             quotes.map((q) => (
@@ -29,6 +30,7 @@ export default function QuoteList() {
                 <td>{q.name}</td>
                 <td>{q.seller}</td>
                 <td>{q.customerName}</td>
+                <td>{q.total} kr</td>
               </tr>
             ))
           )}
