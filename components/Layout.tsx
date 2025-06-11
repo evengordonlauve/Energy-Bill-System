@@ -30,7 +30,6 @@ export default function Layout({ children }: LayoutProps) {
           {isAuthenticated ? (
             <button onClick={logout} className="nav-link button-logout">
               Sign Out ({authUser?.name})
-
             </button>
           ) : (
             <Link href="/login" className="nav-link">Login</Link>
