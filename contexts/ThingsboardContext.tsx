@@ -3,6 +3,14 @@ import { createContext, useContext, useEffect, useState, ReactNode } from 'react
 interface TbCustomer {
   id: string;
   title: string;
+  /** Optional display name for compatibility with local Customer interface */
+  name?: string;
+  /** Optional organization number if available */
+  org?: string;
+  /** Optional primary contact details */
+  contact?: { name: string; email: string };
+  /** Optional asset count */
+  assets?: number;
 }
 
 interface TbUser {
