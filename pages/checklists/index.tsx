@@ -13,7 +13,7 @@ interface Checklist {
 const STORAGE_KEY = "checklists";
 
 export default function Checklists() {
-  const { user } = useAuth();
+  const { user: authUser } = useAuth();
   const [checklists, setChecklists] = useState<Checklist[]>([]);
   const [editTitles, setEditTitles] = useState<Record<number, string>>({});
 
@@ -45,7 +45,7 @@ export default function Checklists() {
         return {
           ...c,
           done: true,
-          doneBy: user?.name || "Unknown",
+          doneBy: authUser?.name || "Unknown",
           doneAt: new Date().toISOString(),
         };
       }),
