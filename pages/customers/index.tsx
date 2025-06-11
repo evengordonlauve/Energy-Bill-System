@@ -4,6 +4,14 @@ import { useThingsboard } from "../../contexts/ThingsboardContext";
 export default function Customers() {
   const { customers, loading } = useThingsboard();
 
+  if (loading) {
+    return (
+      <Layout>
+        <p>Loading...</p>
+      </Layout>
+    );
+  }
+
   return (
     <Layout>
       <h1>Customers</h1>
@@ -20,7 +28,7 @@ export default function Customers() {
         <tbody>
           {customers.map((c) => (
             <tr key={c.id}>
-              <td>{c.name}</td>
+              <td>{c.name || c.title || 'Unknown'}</td>
               <td>{c.org || ''}</td>
               <td>
                 {c.contact && (
@@ -31,19 +39,10 @@ export default function Customers() {
                 )}
               </td>
               <td>{c.assets || ''}</td>
-
             </tr>
-          </thead>
-          <tbody>
-            {customers.map((c) => (
-              <tr key={c.id}>
-                <td>{c.title}</td>
-                <td>{c.id}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      )}
+          ))}
+        </tbody>
+      </table>
     </Layout>
   );
 }
