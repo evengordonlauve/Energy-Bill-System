@@ -21,7 +21,7 @@ jobs:
       - name: Set up Node.js version
         uses: actions/setup-node@v3
         with:
-          node-version: '20.x'
+          node-version: '22.x'
 
       - name: npm install, build, and test
         run: |
@@ -60,21 +60,9 @@ jobs:
       - name: Login to Azure
         uses: azure/login@v2
         with:
-          client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_06C7C1389A594A788C39EAADB0197C0C }}
-          tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_6A254CEF1C1D4AD69608514CD9E9EE9F }}
-          subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_3B09DB5238FC48B585E13BB28E40E897 }}
-
-      - name: Configure build during deployment
-        uses: azure/appservice-settings@v1
-        with:
-          app-name: 'acronenergysystemtools'
-          app-settings-json: |
-            [
-              {
-                "name": "SCM_DO_BUILD_DURING_DEPLOYMENT",
-                "value": "true"
-              }
-            ]
+          client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_0020B17CC59042148C17E02BF5A2C58B }}
+          tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_A3DA8A51A3164740BD8B55C2CF6CFC8F }}
+          subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_6A47BF036AA945E68B979ADA442F5A77 }}
 
       - name: 'Deploy to Azure Web App'
         id: deploy-to-webapp
@@ -83,5 +71,4 @@ jobs:
           app-name: 'acronenergysystemtools'
           slot-name: 'Production'
           package: .
-          clean: true
           
