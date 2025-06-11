@@ -1,12 +1,13 @@
 import Layout from "../../components/Layout";
-import { useCustomers } from "../../contexts/CustomerContext";
+import { useThingsboard } from "../../contexts/ThingsboardContext";
 
 export default function Customers() {
-  const { customers } = useCustomers();
+  const { customers, loading } = useThingsboard();
 
   return (
     <Layout>
       <h1>Customers</h1>
+
       <table className="table">
         <thead>
           <tr>
@@ -30,10 +31,19 @@ export default function Customers() {
                 )}
               </td>
               <td>{c.assets || ''}</td>
+
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            {customers.map((c) => (
+              <tr key={c.id}>
+                <td>{c.title}</td>
+                <td>{c.id}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      )}
     </Layout>
   );
 }

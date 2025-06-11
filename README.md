@@ -6,6 +6,7 @@ This repository now provides a very small Next.js skeleton with placeholder page
 
 * Removed the unused `Figma design` prototype directory.
 * Dropped `autoprefixer` and the custom `postcss.config.js` since Next.js already handles vendor prefixing.
+* Added an admin-only checklist tool to create new checklists stored in localStorage.
 
 ## Setup
 
@@ -20,6 +21,20 @@ This repository now provides a very small Next.js skeleton with placeholder page
    ```
 
 Visit `http://localhost:3000` to see the placeholder page.
+
+### ThingsBoard integration
+
+The app can load customers and users from a ThingsBoard instance. Copy
+`.env.local.example` to `.env.local` and fill in your ThingsBoard client ID,
+client secret and API URL:
+
+```bash
+cp .env.local.example .env.local
+# edit .env.local
+```
+
+These environment variables are read by the Next.js API routes to authenticate
+against ThingsBoard using the client credentials flow.
 
 ## Continuous Deployment
 
