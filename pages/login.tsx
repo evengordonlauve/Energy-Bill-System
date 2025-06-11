@@ -1,7 +1,6 @@
 import { FormEvent, ChangeEvent, useState } from "react";
 import { useRouter } from "next/router";
 import { useAuth } from "../contexts/AuthContext";
-import "../styles/login.css";
 
 export default function Login() {
   const router = useRouter();
