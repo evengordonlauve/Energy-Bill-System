@@ -6,6 +6,7 @@ const navItems = [
   { label: 'Dashboard', href: '/' },
   { label: 'Cost Calc', href: '/calculations/cost' },
   { label: 'Price Lists', href: '/calculations/price' },
+  { label: 'Quotes', href: '/quotes' },
   { label: 'Customers', href: '/customers' },
   { label: 'Checklists', href: '/checklists' },
   { label: 'Admin', href: '/admin' }
@@ -29,6 +30,7 @@ export default function Layout({ children }: LayoutProps) {
           {isAuthenticated ? (
             <button onClick={logout} className="nav-link button-logout">
               Sign Out ({authUser?.name})
+
             </button>
           ) : (
             <Link href="/login" className="nav-link">Login</Link>
