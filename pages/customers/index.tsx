@@ -1,36 +1,8 @@
-import { useState } from "react";
 import Layout from "../../components/Layout";
-
-interface Customer {
-  id: number;
-  name: string;
-  org: string;
-  contact: {
-    name: string;
-    email: string;
-  };
-  assets: number;
-}
-
-const sampleCustomers: Customer[] = [
-  {
-    id: 1,
-    name: "Acme Corp",
-    org: "123456789",
-    contact: { name: "John Doe", email: "john@example.com" },
-    assets: 3,
-  },
-  {
-    id: 2,
-    name: "Globex LLC",
-    org: "987654321",
-    contact: { name: "Jane Smith", email: "jane@example.com" },
-    assets: 1,
-  },
-];
+import { useCustomers } from "../../contexts/CustomerContext";
 
 export default function Customers() {
-  const [customers] = useState<Customer[]>(sampleCustomers);
+  const { customers } = useCustomers();
 
   return (
     <Layout>
@@ -48,12 +20,16 @@ export default function Customers() {
           {customers.map((c) => (
             <tr key={c.id}>
               <td>{c.name}</td>
-              <td>{c.org}</td>
+              <td>{c.org || ''}</td>
               <td>
-                <div>{c.contact.name}</div>
-                <div className="small">{c.contact.email}</div>
+                {c.contact && (
+                  <>
+                    <div>{c.contact.name}</div>
+                    <div className="small">{c.contact.email}</div>
+                  </>
+                )}
               </td>
-              <td>{c.assets}</td>
+              <td>{c.assets || ''}</td>
             </tr>
           ))}
         </tbody>
