@@ -1,6 +1,6 @@
 import { createContext, useContext, useEffect, useState, ReactNode } from 'react';
 
-interface Customer {
+interface TbCustomer {
   id: string;
   title: string;
 }
@@ -12,7 +12,7 @@ interface TbUser {
 }
 
 interface ThingsboardContextType {
-  customers: Customer[];
+  customers: TbCustomer[];
   users: TbUser[];
   loading: boolean;
   refresh: () => Promise<void>;
@@ -21,7 +21,7 @@ interface ThingsboardContextType {
 const ThingsboardContext = createContext<ThingsboardContextType | undefined>(undefined);
 
 export function ThingsboardProvider({ children }: { children: ReactNode }) {
-  const [customers, setCustomers] = useState<Customer[]>([]);
+  const [customers, setCustomers] = useState<TbCustomer[]>([]);
   const [users, setUsers] = useState<TbUser[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
 
