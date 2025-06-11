@@ -16,7 +16,7 @@ interface LayoutProps {
 }
 
 export default function Layout({ children }: LayoutProps) {
-  const { isAuthenticated, user, logout } = useAuth();
+  const { isAuthenticated, user: authUser, logout } = useAuth();
   return (
     <>
       <header className="header">
@@ -28,7 +28,7 @@ export default function Layout({ children }: LayoutProps) {
           ))}
           {isAuthenticated ? (
             <button onClick={logout} className="nav-link button-logout">
-              Sign Out ({user.name})
+              Sign Out ({authUser?.name})
             </button>
           ) : (
             <Link href="/login" className="nav-link">Login</Link>
