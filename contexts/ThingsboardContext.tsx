@@ -32,21 +32,25 @@ export function ThingsboardProvider({ children }: { children: ReactNode }) {
         fetch('/api/thingsboard/tenants'),
         fetch('/api/thingsboard/users'),
       ]);
-      if (cRes.ok) {
-        const data = await cRes.json();
-        setCustomers(data.data || data);
+
+      if (!cRes.ok || !uRes.ok) {
+        throw new Error('Failed to fetch Thingsboard data');
       }
-      if (uRes.ok) {
-        const data = await uRes.json();
-        setUsers(data.data || data);
-      }
+
+      const cData = await cRes.json();
+      const uData = await uRes.json();
+
+      setCustomers(cData.data || cData);
+      setUsers(uData.data || uData);
+    } catch (err) {
+      console.error('Error refreshing Thingsboard data:', err);
     } finally {
       setLoading(false);
     }
   };
 
   useEffect(() => {
-    refresh();
+    refresh().catch(err => console.error('Unhandled refresh error:', err));
   }, []);
 
   return (
