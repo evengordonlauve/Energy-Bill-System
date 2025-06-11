@@ -1,32 +1,32 @@
 import Layout from '../../components/Layout';
-
-const sampleUsers = [
-  { id: 1, name: 'Admin User', email: 'admin@example.com', role: 'Admin' },
-  { id: 2, name: 'Regular User', email: 'user@example.com', role: 'User' }
-];
+import { useThingsboard } from '../../contexts/ThingsboardContext';
 
 export default function UserManagement() {
+  const { users, loading } = useThingsboard();
+
   return (
     <Layout>
       <h1>User Management</h1>
-      <table className="user-table">
-        <thead>
-          <tr>
-            <th>Name</th>
-            <th>Email</th>
-            <th>Role</th>
-          </tr>
-        </thead>
-        <tbody>
-          {sampleUsers.map((u) => (
-            <tr key={u.id}>
-              <td>{u.name}</td>
-              <td>{u.email}</td>
-              <td>{u.role}</td>
+      {loading ? (
+        <p>Loading...</p>
+      ) : (
+        <table className="user-table">
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Email</th>
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            {users.map((u) => (
+              <tr key={u.id}>
+                <td>{u.name || u.email}</td>
+                <td>{u.email}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      )}
     </Layout>
   );
 }

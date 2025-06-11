@@ -2,3 +2,6 @@
 out/
 node_modules/
 site/wwwroot/
+.env
+.env.local
+.env.*.local
