@@ -6,6 +6,7 @@ const navItems = [
   { label: 'Dashboard', href: '/' },
   { label: 'Cost Calc', href: '/calculations/cost' },
   { label: 'Price Lists', href: '/calculations/price' },
+  { label: 'Quotes', href: '/quotes' },
   { label: 'Customers', href: '/customers' },
   { label: 'Checklists', href: '/checklists' },
   { label: 'Admin', href: '/admin' }
