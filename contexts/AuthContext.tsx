@@ -1,4 +1,20 @@
-import { createContext, useContext, useEffect, useState } from 'react';
+import { createContext, useContext, useEffect, useState, ReactNode } from 'react';
+
+interface User {
+  id: string;
+  email: string;
+  name: string;
+  isAdmin: boolean;
+}
+
+interface AuthContextType {
+  user: User | null;
+  loading: boolean;
+  login: (email: string, password: string) => Promise<boolean>;
+  logout: () => void;
+  isAuthenticated: boolean;
+  isAdmin: boolean;
+}
 
 const MOCK_USERS = [
   {
@@ -17,21 +33,25 @@ const MOCK_USERS = [
   },
 ];
 
-const AuthContext = createContext();
+const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
-export function AuthProvider({ children }) {
-  const [user, setUser] = useState(null);
-  const [loading, setLoading] = useState(true);
+interface AuthProviderProps {
+  children: ReactNode;
+}
+
+export function AuthProvider({ children }: AuthProviderProps) {
+  const [user, setUser] = useState<User | null>(null);
+  const [loading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
     if (typeof window !== 'undefined') {
       const stored = localStorage.getItem('user');
-      if (stored) setUser(JSON.parse(stored));
+      if (stored) setUser(JSON.parse(stored) as User);
     }
     setLoading(false);
   }, []);
 
-  const login = async (email, password) => {
+  const login = async (email: string, password: string): Promise<boolean> => {
     const found = MOCK_USERS.find(
       (u) => u.email === email && u.password === password
     );
@@ -46,7 +66,7 @@ export function AuthProvider({ children }) {
     return false;
   };
 
-  const logout = () => {
+  const logout = (): void => {
     setUser(null);
     if (typeof window !== 'undefined') {
       localStorage.removeItem('user');
@@ -69,7 +89,7 @@ export function AuthProvider({ children }) {
   );
 }
 
-export function useAuth() {
+export function useAuth(): AuthContextType {
   const ctx = useContext(AuthContext);
   if (!ctx) {
     throw new Error('useAuth must be used within AuthProvider');
