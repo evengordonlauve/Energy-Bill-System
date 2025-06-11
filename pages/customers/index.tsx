@@ -1,63 +1,32 @@
-import { useState } from "react";
 import Layout from "../../components/Layout";
-
-interface Customer {
-  id: number;
-  name: string;
-  org: string;
-  contact: {
-    name: string;
-    email: string;
-  };
-  assets: number;
-}
-
-const sampleCustomers: Customer[] = [
-  {
-    id: 1,
-    name: "Acme Corp",
-    org: "123456789",
-    contact: { name: "John Doe", email: "john@example.com" },
-    assets: 3,
-  },
-  {
-    id: 2,
-    name: "Globex LLC",
-    org: "987654321",
-    contact: { name: "Jane Smith", email: "jane@example.com" },
-    assets: 1,
-  },
-];
+import { useThingsboard } from "../../contexts/ThingsboardContext";
 
 export default function Customers() {
-  const [customers] = useState<Customer[]>(sampleCustomers);
+  const { customers, loading } = useThingsboard();
 
   return (
     <Layout>
       <h1>Customers</h1>
-      <table className="table">
-        <thead>
-          <tr>
-            <th>Name</th>
-            <th>Org Number</th>
-            <th>Contact</th>
-            <th>Assets</th>
-          </tr>
-        </thead>
-        <tbody>
-          {customers.map((c) => (
-            <tr key={c.id}>
-              <td>{c.name}</td>
-              <td>{c.org}</td>
-              <td>
-                <div>{c.contact.name}</div>
-                <div className="small">{c.contact.email}</div>
-              </td>
-              <td>{c.assets}</td>
+      {loading ? (
+        <p>Loading...</p>
+      ) : (
+        <table className="table">
+          <thead>
+            <tr>
+              <th>Customer Name</th>
+              <th>ID</th>
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            {customers.map((c) => (
+              <tr key={c.id}>
+                <td>{c.title}</td>
+                <td>{c.id}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      )}
     </Layout>
   );
 }
